@@ -2,15 +2,11 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <div id="container">
-        <ion-item>
-          <p>Backdrop remains partially visible after closing modal 2 (inline and controller)</p>
-        </ion-item>
-        <ion-item>
-          <p><i>Latest Chrome under Windows and macOS</i></p>
-        </ion-item>
-        <ion-item>
-          <p><b>Maximum window width: 767px</b></p>
-        </ion-item>
+        <h1>Backdrop remains partially visible after closing modal 2 (inline and controller).</h1>
+        <p>Reproducible: Chrome 118 under Windows 10 and macOS Sonoma.<br>
+          Not under Ubuntu 23.10.<br>
+          Safari and Firefox seem to be not affected.</p>
+        <p><strong>Maximum window width: 767px</strong></p>
         <ion-item>
           <ion-button id="open-modal-1" expand="block">Open Modal 1 (Inline)</ion-button>
         </ion-item>
@@ -140,6 +136,8 @@ const openControllerModals = async () => {
   line-height: 22px;
 
   color: #8c8c8c;
+
+  padding: 1rem;
 
   margin: 0;
 }
