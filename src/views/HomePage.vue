@@ -3,7 +3,13 @@
     <ion-content :fullscreen="true">
       <div id="container">
         <ion-item>
-          <p>Backdrop remains partially visible after closing modal 2</p>
+          <p>Backdrop remains partially visible after closing modal 2 (inline and controller)</p>
+        </ion-item>
+        <ion-item>
+          <p><i>Latest Chrome under Windows and macOS</i></p>
+        </ion-item>
+        <ion-item>
+          <p><b>Maximum window width: 767px</b></p>
         </ion-item>
         <ion-item>
           <ion-button id="open-modal-1" expand="block">Open Modal 1 (Inline)</ion-button>
@@ -39,10 +45,12 @@
                     <p>Modal 2: {{ content2 }}</p>
                   </ion-item>
                   <ion-item>
-                    <ion-button @click="confirmOnWillDismiss2()">Confirm using "onWillDismiss" with data (bug?)</ion-button>
+                    <ion-button color="danger" @click="confirmOnWillDismiss2()">Confirm using "onWillDismiss" with data
+                      (bug?)</ion-button>
                   </ion-item>
                   <ion-item>
-                    <ion-button @click="confirmOnDidDismiss2()">Confirm using "onDidDismiss" with data (okay)</ion-button>
+                    <ion-button color="success" @click="confirmOnDidDismiss2()">Confirm using "onDidDismiss" with data
+                      (okay)</ion-button>
                   </ion-item>
                   <ion-item>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia unde accusamus ad sunt nemo
