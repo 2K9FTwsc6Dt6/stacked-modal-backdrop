@@ -2,14 +2,14 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <div id="container">
-      <ion-item>
-        <p>Backdrop remains partially visible after closing modal 2</p>
-    </ion-item>
         <ion-item>
-          <ion-button id="open-modal-1" expand="block">Open Modal 1 Inline (Okay)</ion-button>
+          <p>Backdrop remains partially visible after closing modal 2</p>
         </ion-item>
         <ion-item>
-          <ion-button @click="openModal1" expand="block">Open Modal 1 Controller (Bug?)</ion-button>
+          <ion-button id="open-modal-1" expand="block">Open Modal 1 (Inline)</ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-button @click="openControllerModals" expand="block">Open Modal 1 (Controller)</ion-button>
         </ion-item>
         <ion-modal ref="modal1" trigger="open-modal-1" :initial-breakpoint="0.75" :breakpoints="[0, 0.75]">
           <ion-header>
@@ -26,7 +26,7 @@
             <ion-item>
               <ion-button id="open-modal-2" expand="block">Open Modal 2</ion-button>
               <ion-modal ref="modal2" trigger="open-modal-2" :initial-breakpoint="0.5" :breakpoints="[0, 0.5]"
-                @willDismiss="onWillDismiss2" @didDismiss="didDismiss2">
+                @willDismiss="onWillDismiss2" @didDismiss="onDidDismiss2">
                 <ion-header>
                   <ion-toolbar>
                     <ion-buttons slot="end">
@@ -39,7 +39,10 @@
                     <p>Modal 2: {{ content2 }}</p>
                   </ion-item>
                   <ion-item>
-                    <ion-button @click="confirm2()">Confirm with data</ion-button>
+                    <ion-button @click="confirmOnWillDismiss2()">Confirm using "onWillDismiss" with data (bug?)</ion-button>
+                  </ion-item>
+                  <ion-item>
+                    <ion-button @click="confirmOnDidDismiss2()">Confirm using "onDidDismiss" with data (okay)</ion-button>
                   </ion-item>
                   <ion-item>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia unde accusamus ad sunt nemo
@@ -72,24 +75,32 @@ import ControllerModal1 from './ControllerModal1.vue';
 const content1 = ref('Content 1');
 const content2 = ref('Hello from modal 2!');
 
+let count1 = 0;
+
 const modal1 = ref();
 const modal2 = ref();
 
 const cancel1 = () => modal1.value.$el.dismiss(null, 'cancel');
 const cancel2 = () => modal2.value.$el.dismiss(null, 'cancel');
 
-const confirm2 = () => modal2.value.$el.dismiss(content2.value, 'confirm');
+const confirmOnWillDismiss2 = () => modalController.dismiss(content2.value, 'confirmOnWillDismiss');
+const confirmOnDidDismiss2 = () => modalController.dismiss(content2.value, 'confirmOnDidDismiss');
 
-// didDismiss2
-const onWillDismiss2 = (ev: CustomEvent<OverlayEventDetail>) => {
-  if (ev.detail.role === 'confirm') {
-    content1.value = ev.detail.data;
+const onWillDismiss2 = (event: CustomEvent<OverlayEventDetail>) => {
+  if (event.detail.role === 'confirmOnWillDismiss') {
+    content1.value = `${event.detail.data} ✖ ${++count1} (onWillDismiss)`;
   }
 };
 
-const didDismiss2 = () => { };
+const onDidDismiss2 = (event: CustomEvent<OverlayEventDetail>) => {
+  if (event.detail.role === 'confirmOnDidDismiss') {
+    content1.value = `${event.detail.data} ✖ ${++count1} (onDidDismiss)`;
+  }
+};
 
-const openModal1 = async () => {
+// Controller modals version
+
+const openControllerModals = async () => {
   const modal = await modalController.create({
     component: ControllerModal1,
     initialBreakpoint: 0.75,

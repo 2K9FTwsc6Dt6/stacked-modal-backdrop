@@ -11,7 +11,7 @@
       <p>Modal 1: {{ content }}</p>
     </ion-item>
     <ion-item>
-      <ion-button @click="openModal2()" expand="block">Open Modal 2</ion-button>
+      <ion-button @click="openModal()" expand="block">Open Modal 2</ion-button>
     </ion-item>
     <ion-item>
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia unde accusamus ad sunt nemo nostrum
@@ -28,9 +28,11 @@ import ControllerModal2 from './ControllerModal2.vue';
 
 const content = ref('Content 1');
 
+let count = 0;
+
 const cancel = () => modalController.dismiss(null, 'cancel');
 
-const openModal2 = async () => {
+const openModal = async () => {
   const modal = await modalController.create({
     component: ControllerModal2,
     initialBreakpoint: 0.5,
@@ -39,10 +41,20 @@ const openModal2 = async () => {
 
   await modal.present();
 
-  const { data, role } = await modal.onWillDismiss();
+  // Curly braces just for a new scope...
+  {
+    const { data, role } = await modal.onWillDismiss();
+    if (role === 'confirmOnWillDismiss') {
+      content.value = `${data} ✖ ${++count} (onWillDismiss)`;
+    }
+  }
 
-  if (role === 'confirm') {
-    content.value = data;
+  // Curly braces just for a new scope...
+  {
+    const { data, role } = await modal.onDidDismiss();
+    if (role === 'confirmOnDidDismiss') {
+      content.value = `${data} ✖ ${++count} (onDidDismiss)`;
+    }
   }
 };
 </script>
