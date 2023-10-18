@@ -1,15 +1,16 @@
 <template>
   <ion-page>
-  
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
       <div id="container">
-        <ion-button id="open-modal-1" expand="block">Open Modal 1</ion-button>
+      <ion-item>
+        <p>Backdrop remains partially visible after closing modal 2</p>
+    </ion-item>
+        <ion-item>
+          <ion-button id="open-modal-1" expand="block">Open Modal 1 Inline (Okay)</ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-button @click="openModal1" expand="block">Open Modal 1 Controller (Bug?)</ion-button>
+        </ion-item>
         <ion-modal ref="modal1" trigger="open-modal-1" :initial-breakpoint="0.75" :breakpoints="[0, 0.75]">
           <ion-header>
             <ion-toolbar>
@@ -20,11 +21,12 @@
           </ion-header>
           <ion-content class="ion-padding">
             <ion-item>
-              <p>Modal 1 content: {{ modifiedContent }}</p>
+              <p>Modal 1: {{ content1 }}</p>
             </ion-item>
             <ion-item>
               <ion-button id="open-modal-2" expand="block">Open Modal 2</ion-button>
-              <ion-modal ref="modal2" trigger="open-modal-2" :initial-breakpoint="0.5" :breakpoints="[0, 0.5]">
+              <ion-modal ref="modal2" trigger="open-modal-2" :initial-breakpoint="0.5" :breakpoints="[0, 0.5]"
+                @willDismiss="onWillDismiss2" @didDismiss="didDismiss2">
                 <ion-header>
                   <ion-toolbar>
                     <ion-buttons slot="end">
@@ -34,7 +36,10 @@
                 </ion-header>
                 <ion-content class="ion-padding">
                   <ion-item>
-                    <ion-button @click="++modifiedContent">Modify modal 1 content</ion-button>
+                    <p>Modal 2: {{ content2 }}</p>
+                  </ion-item>
+                  <ion-item>
+                    <ion-button @click="confirm2()">Confirm with data</ion-button>
                   </ion-item>
                   <ion-item>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia unde accusamus ad sunt nemo
@@ -59,16 +64,40 @@
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonButtons, IonContent, IonHeader, IonItem, IonModal, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonButton, IonButtons, IonContent, IonHeader, IonItem, IonModal, IonPage, IonToolbar, modalController } from '@ionic/vue';
+import { OverlayEventDetail } from '@ionic/core/components';
 import { ref } from 'vue';
+import ControllerModal1 from './ControllerModal1.vue';
 
-const modifiedContent = ref(0);
+const content1 = ref('Content 1');
+const content2 = ref('Hello from modal 2!');
 
 const modal1 = ref();
 const modal2 = ref();
 
 const cancel1 = () => modal1.value.$el.dismiss(null, 'cancel');
 const cancel2 = () => modal2.value.$el.dismiss(null, 'cancel');
+
+const confirm2 = () => modal2.value.$el.dismiss(content2.value, 'confirm');
+
+// didDismiss2
+const onWillDismiss2 = (ev: CustomEvent<OverlayEventDetail>) => {
+  if (ev.detail.role === 'confirm') {
+    content1.value = ev.detail.data;
+  }
+};
+
+const didDismiss2 = () => { };
+
+const openModal1 = async () => {
+  const modal = await modalController.create({
+    component: ControllerModal1,
+    initialBreakpoint: 0.75,
+    breakpoints: [0, 0.75]
+  });
+
+  await modal.present();
+};
 </script>
 
 <style scoped>
