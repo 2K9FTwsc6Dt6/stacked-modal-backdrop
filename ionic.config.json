@@ -1,0 +1,7 @@
+{
+  "name": "stacked-modal-backdrop",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
