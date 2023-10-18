@@ -11,7 +11,7 @@
       <p>Modal 2: {{ content }}</p>
     </ion-item>
     <ion-item>
-      <ion-button color="danger" @click="confirmOnWillDismiss()">Confirm using "onWillDismiss" with data (bug?)</ion-button>
+      <ion-button color="danger" @click="confirmOnWillDismiss()">Confirm using "onWillDismiss" with data (bug)</ion-button>
     </ion-item>
     <ion-item>
       <ion-button color="success" @click="confirmOnDidDismiss()">Confirm using "onDidDismiss" with data (okay)</ion-button>

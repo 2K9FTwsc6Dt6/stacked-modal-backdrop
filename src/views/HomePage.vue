@@ -46,7 +46,7 @@
                   </ion-item>
                   <ion-item>
                     <ion-button color="danger" @click="confirmOnWillDismiss2()">Confirm using "onWillDismiss" with data
-                      (bug?)</ion-button>
+                      (bug)</ion-button>
                   </ion-item>
                   <ion-item>
                     <ion-button color="success" @click="confirmOnDidDismiss2()">Confirm using "onDidDismiss" with data
