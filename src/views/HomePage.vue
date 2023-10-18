@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <div id="container">
-        <h1>Backdrop remains partially visible after closing modal 2 (inline and controller).</h1>
+        <h1>Backdrop remains partially visible and crops content after closing modal 2 (inline and controller).</h1>
         <p>Reproducible: Chrome 118 under Windows 10 (native) and macOS Sonoma (BrowserStack).<br>
           Not under Windows 10/11 in BrowserStack and an Ubuntu 23.10 VMware.<br>
           Safari and Firefox seem to be not affected.</p>
